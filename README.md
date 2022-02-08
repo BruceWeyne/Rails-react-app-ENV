@@ -1,7 +1,6 @@
 # Docker Environment Build for Ruby on Rails & React with API
 
 ## 1. FIle set
-docker-compose.yml
 api
 - Dockerfile
 - entrypoint.sh
@@ -11,6 +10,8 @@ api
 front
 - Dockerfile
 
+docker-compose.yml
+
 ## 2. Set up projrct name
 Replace all written by "{project-name}" with your own.
 
@@ -18,7 +19,7 @@ Replace all written by "{project-name}" with your own.
 ```
 $ docker-compose run api rails new . --force --no-deps --database=postgresql --api
 $ docker-compose build
-$ docker-compose run --rm front sh -c "npm install -g create-react-app && create-react-app rails-react-app"
+$ docker-compose run --rm front sh -c "npm install -g create-react-app && create-react-app react-app"
 ```
 
 ## 4. Alter api/config/database.yml
