@@ -22,6 +22,11 @@ $ docker-compose build
 $ docker-compose run --rm front sh -c "npm install -g create-react-app && create-react-app react-app"
 ```
 
+If Typescript is needed,
+```
+docker-compose run --rm front sh -c "npm install -g create-react-app && create-react-app react-app --template typescript"
+```
+
 ## 4. Alter api/config/database.yml
 ```
 default: &default
