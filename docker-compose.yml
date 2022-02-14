@@ -1,21 +1,38 @@
 version: '3.8'
 
 services:
-  db:
+  db: # Database setting
     image: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: 'root'
-  api:
+      # POSTGRES_USER: postgres
+      # POSTGRES_PASSWORD: root
+      # POSTGRES_DB: GSFYT_db
+      LANG: ja_JP.UTF-8
+    hostname: postgres
+  adm: # pgAdmin setting
+    image: dpage/pgadmin4:latest
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin:z 
+      # - ./pgadmin:/var/lib/pgadmin/storage:z
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+       PGADMIN_DEFAULT_EMAIL: {your-email}
+       PGADMIN_DEFAULT_PASSWORD: {your-arbitrary-password}
+  api: # Server setting
     build: 
-      context: ./api/
+      context: ./api/ # api: Set the same name as the directory's one
       dockerfile: Dockerfile
     command: /bin/sh -c "rm -f /{project-name}/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     image: rails:dev
     volumes:
-      - ./api:/{project-name}
-      - ./api/vendor/bundle:/{project-name}/vendor/bundle
+      - ./api:/{project-name} # api: Set the same name as the directory's one
+      - ./api/vendor/bundle:/{project-name}/vendor/bundle # api: Set the same name as the directory's one
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
@@ -23,15 +40,15 @@ services:
       - 3001:3000
     depends_on:
       - db
-  front:
+  front: # Front Setting
     build: 
-      context: ./front/
+      context: ./front/ # front: Set the same name as the directory's one
       dockerfile: Dockerfile
     volumes:
-      - ./front:/usr/src/app
+      - ./front:/usr/src/app # front: Set the same name as the directory's one
     command: sh -c "cd react-app && yarn start"
     ports:
-      - "8000:3000"
+      - "8000:3000" # Avalable to set port 3000:3000
 volumes:
   postgres-data:
     driver: local
